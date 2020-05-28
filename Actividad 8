@@ -1,0 +1,18 @@
+#include<stdio.h>
+
+void main() {
+	
+	int re1;
+	int re2;
+	int req;
+
+	printf("Ingrese el valor de la resistencia 1: \n");
+	scanf("%f", &re1);
+	printf("Ingrese el valor de la resistencia 2: \n");
+	scanf("%f", &re2);
+	
+	req = (re1 * re2) / (re1 + re2);
+
+
+ printf("Resistencia equivalente: %f", req);
+}
