@@ -1,0 +1,18 @@
+#include<stdio.h>
+
+void main() {
+
+	int precio;
+	int descuento;
+	int resultado;
+
+	printf("Ingrese el precio: \n");
+	scanf("%d", &precio);
+	printf("Ingrese el descuento: \n");
+	scanf("%d", &descuento);
+	resultado = precio - ((precio*descuento)/100);
+	
+	printf("Precio total: \n");
+	printf("%d", resultado);
+
+}
