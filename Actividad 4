@@ -1,0 +1,27 @@
+#include<stdio.h>
+
+void main() {
+	
+	float pi = 3.1416;
+	float r;
+	float perimetro;
+	float area;
+	float volumen;
+	
+	printf("Introduzca el radio de la circunferencia: ");
+	scanf("%f", &r);
+	
+	perimetro = 2 * r * pi;
+	area = pi * r * r;
+	volumen = 4 * pi * (r*r*r) / 3;
+	printf("\n");
+	printf("Perimetro: %f", perimetro);
+	printf("\n");
+	printf("Area: %f", area);
+	printf("\n");
+	printf("Volumen: %f", volumen);
+	/*
+	printf("\n");
+	printf("Perimetro: %f \n Area: %f \n Volumen: %f", perimetro, area, volumen);
+	*/
+}
