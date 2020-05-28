@@ -1,0 +1,41 @@
+#include<stdio.h>
+
+void main() {
+
+	int dias = 0;
+	int horas = 0;
+	int minutos = 0;
+	int segundos;
+
+	printf("Ingrese la cantidad de segundos: \n");
+	scanf("%d", &segundos);
+	
+	if(segundos >= 86400) {
+		dias += segundos/86400;
+		segundos -= 86400 * dias;
+	}
+	
+	if(segundos >= 3600) {
+		horas += segundos/3600;
+		segundos -= 3600 * horas;
+	}
+	
+	if(segundos >= 60) {
+		minutos += segundos/60;
+		segundos -= 60 * minutos;
+	}
+	
+	printf("Dias: \n");
+	printf("%d", dias);
+	printf("\n");
+	printf("Horas: \n");
+	printf("%d", horas);
+	printf("\n");
+	printf("Minutos: \n");
+	printf("%d", minutos);
+	printf("\n");
+	printf("Segundos: \n");
+	printf("%d", segundos);
+	printf("\n");
+
+}
