@@ -1,0 +1,45 @@
+#include<stdio.h>
+#include <stdbool.h>
+
+void main() {
+	
+	int codigo;
+	int precio;
+	int cantidad;
+	int descuento;
+	float precioTotal;
+	float precioTotalDescuento;
+	float precioTotalIva;
+	bool flag = false;
+
+	while(flag == false) {
+		printf("Ingrese el codigo del producto: \n");
+		scanf("%d", &codigo);
+		
+		if (codigo > 999999) {
+			printf("El codigo no debe tener mas de 6 cifras. \n");
+			flag = false;
+		} else {
+			flag = true;
+		}
+	}
+	
+	printf("Ingrese el precio del producto: \n");
+	scanf("%d", &precio);
+	printf("Ingrese la cantidad de productos: \n");
+	scanf("%d", &cantidad);
+	printf("Ingrese el descuento del producto: \n");
+	scanf("%d", &descuento);
+	
+	precioTotal = precio * cantidad;
+	precioTotalDescuento = precioTotal - ((descuento * precioTotal) / 100);
+	precioTotalIva = precioTotalDescuento + (19 * precioTotal) / 100;
+	
+	printf("Precio por producto: %d", precio);
+	printf("\n");
+	printf("Precio total: %f", precioTotal);
+	printf("\n");
+	printf("Precio total con descuento: %f", precioTotalDescuento);
+	printf("\n");
+	printf("Precio total con iva: %f", precioTotalIva);
+}
