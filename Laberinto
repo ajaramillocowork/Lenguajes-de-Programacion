@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+// Esta actividad se realizó junto a Nicoláz Gómez.
+
 void gotoxy(int x,int y){
 	HANDLE consola;
 	consola = GetStdHandle(STD_OUTPUT_HANDLE);
