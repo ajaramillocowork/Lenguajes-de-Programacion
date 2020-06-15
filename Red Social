@@ -1,0 +1,332 @@
+#include <iostream>
+#include <conio.h>
+#include <stdbool.h>
+#include <stdio.h>
+
+using namespace std;
+
+struct Usuario{
+	string nombre;
+	string apellido;
+	string fNac;
+	string correo;
+	string mensajes[10];
+	int cantMensajes;
+	string muro[2][10];
+	int cantPosteos;
+};
+
+
+Usuario listaUsuarios[10];
+int tamanio = 0;
+
+
+string verificarCorreo() {
+	bool flag = false;
+	string correoNuevo;
+	
+	while (flag == false) {
+		cin >> correoNuevo;
+					
+		if (tamanio > 0) {
+			for (int i = 0; i < tamanio; i++) {
+				if (listaUsuarios[i].correo == correoNuevo) {
+					cout << endl << "Este correo ya existe. Por favor ingrese uno distinto." << endl << endl;
+					flag = false;
+					break;
+				} else {
+					flag = true;
+				}
+			}
+		} else {
+			flag = true;
+		}
+	}
+	
+	return correoNuevo;
+}
+
+/* Retorna el �ndice del usuario actual autentificado */
+int usuarioAuth(string authCorreo) {
+	int numUsuarioAuth;
+	
+	for (int i = 0; i < tamanio; i++) {
+		if (listaUsuarios[i].correo == authCorreo) {
+			numUsuarioAuth = i;
+		}
+	}
+	
+	return numUsuarioAuth;
+}
+
+/* Lo que busca esta funci�n es devolver el �ndice del
+arreglo de usuarios y evitar que se env�e un mensaje a
+un usuario con su bandeja de mensajes llena. */
+int seleccionarUsuario(string authCorreo) {
+	bool flag = false;
+	bool flag2 = false;
+	int numUsuario;
+	int usuarioSaltado;
+	
+	while (flag2 == false) {
+	
+		while (flag == false) {
+			int lista = 1;
+		
+			for (int i = 0; i < tamanio; i++) {
+				if (listaUsuarios[i].correo == authCorreo) {
+					lista--;
+					usuarioSaltado = i;
+					continue;
+				}
+				cout << (lista+i) << ") " << listaUsuarios[i].nombre << " " << listaUsuarios[i].apellido << "(" << listaUsuarios[i].correo << ")" << endl;
+			}
+		
+			cin >> numUsuario;
+		
+			if (numUsuario > 0 && numUsuario < (tamanio)) {
+				numUsuario--;
+				flag = true;
+			} else {
+				cout << endl << "Ingrese un numero dentro de los mostrados." << endl << endl;
+			}
+		}
+	
+		/* Aqu� se aumenta en 1 a la variable numUsuario en caso de que se haya querido
+		escoger un �ndice del arreglo "listaUsuarios[]" igual o mayor al usuario saltado */
+		if (numUsuario >= usuarioSaltado) {
+			numUsuario++;
+		}
+	
+		if (listaUsuarios[numUsuario].cantMensajes >= 10) {
+			cout << endl << "[" << listaUsuarios[numUsuario].nombre << " " << listaUsuarios[numUsuario].apellido << "] tiene su bandeja de mensajes llena; no puede recibir mas mensajes." << endl << endl;
+		} else {
+			flag2 = true;
+		}
+	
+	}
+	return numUsuario;
+}
+
+int preguntarPosteo() {
+	return 0;
+}
+
+void crearPost(string authCorreo) {
+	int numUsuarioAuth = usuarioAuth(authCorreo);
+	int cantPosteos = listaUsuarios[numUsuarioAuth].cantPosteos;
+	string titulo;
+	string frase;
+	
+	cout << endl << "Escriba un titulo para su post:" << endl;
+	cin >> titulo;
+	cout << endl << "Escriba una frase para su post:" << endl;
+	cin >> frase;
+	
+	listaUsuarios[numUsuarioAuth].muro[0][cantPosteos] = titulo;
+	listaUsuarios[numUsuarioAuth].muro[1][cantPosteos] = frase;
+	listaUsuarios[numUsuarioAuth].cantPosteos += 1;
+	
+	cout << endl << "Se ha creado un post con exito." << endl << endl;
+}
+
+void mostrarPost(string authCorreo) {
+	int numUsuarioAuth = usuarioAuth(authCorreo);
+	
+	for (int i = 0; i < listaUsuarios[numUsuarioAuth].cantPosteos; i++) {
+		cout << endl << "----- Titulo -----" << endl;
+		cout << listaUsuarios[numUsuarioAuth].muro[0][i] << endl;
+		cout << endl << "----- Frase ------" << endl;
+		cout << listaUsuarios[numUsuarioAuth].muro[1][i] << endl;
+	}
+}
+
+int main() {
+	int numUsuario;
+	bool flag = false;
+	bool flag2;
+	bool flag3;
+	bool auth = false;
+	string authCorreo;
+	string mensaje;
+	char tecla;
+	
+	while (flag == false) {
+		cout << "Ingrese una opcion: " << endl;
+		cout << "1) Crear usuario." << endl;
+		cout << "2) Ver usuarios." << endl;
+		cout << "3) Autentificarme." << endl;
+		cout << "4) Enviar mensaje." << endl;
+		cout << "5) Ver mis mensajes." << endl;
+		cout << "6) Ver mi muro." << endl;
+		cout << "0) Salir." << endl;
+		tecla = getch();
+	
+		switch(tecla) {
+			
+			/* Crear usuario */
+			case '1':
+				cout << endl << "Ingrese su nombre:" << endl;
+				cin >> listaUsuarios[tamanio].nombre;
+				cout << endl << "Ingrese su apellido:" << endl;
+				cin >> listaUsuarios[tamanio].apellido;
+				cout << endl << "Ingrese su fecha de nacimiento:" << endl;
+				cin >> listaUsuarios[tamanio].fNac;
+				cout << endl << "Ingrese su correo:" << endl;
+				listaUsuarios[tamanio].correo = verificarCorreo();
+				listaUsuarios[tamanio].cantMensajes = 0;
+				listaUsuarios[tamanio].cantPosteos = 0;
+				
+				cout << endl << "Usuario creado correctamente." << endl << endl;
+				
+				tamanio++;
+				break;
+				
+			/* Ver usuarios */
+			case '2':
+				if (tamanio == 0) {
+					cout << endl << "No hay ningun usuario registrado." << endl << endl;
+				} else {
+					cout << endl;
+					for (int i = 0; i < tamanio; i++) {
+						cout << "Usuario " << (i+1) << ":" << endl;
+						cout << "Nombre: " << listaUsuarios[i].nombre << endl;
+						cout << "Apellido: " << listaUsuarios[i].apellido << endl;
+						cout << "Fecha nacimiento: " << listaUsuarios[i].fNac << endl;
+						cout << "Correo: " << listaUsuarios[i].correo << endl << endl;
+					}
+				}
+				break;
+				
+			/* Autentificar cuenta */
+			case '3':
+				if (tamanio == 0) {
+					cout << endl << "Aun no hay un usuario registrado." << endl << endl;
+				} else {
+					cout << endl << "Ingrese su correo electronico:" << endl;
+					cin >> authCorreo;
+					
+					for (int i = 0; i < tamanio; i++) {
+						if (listaUsuarios[i].correo == authCorreo) {
+							auth = true;
+							numUsuario = i;
+							cout << endl << "Se ha conectado a su correo [" << authCorreo << "] correctamente." << endl << endl;
+							authCorreo = listaUsuarios[i].correo;
+							break;
+						} else {
+							auth = false;
+						}
+					}
+					
+					if (auth == false) {
+						cout << endl << "No se ha encontrado ningun usuario con el correo [" << authCorreo << "]." << endl << endl;
+					}
+				}
+				break;
+				
+			/* Enviar mensajes */
+			case '4':
+				int cantMensajes;
+				
+				if (auth == false) {
+					cout << endl << "No se ha autentificado ningun usuario." << endl << endl;
+				} else {
+					if (tamanio < 2) {
+						cout << endl << "No hay mas usuarios para conversar :c" << endl << endl;
+					} else {
+						cout << endl << "A quien desea enviarle un mensaje?" << endl;
+						numUsuario = seleccionarUsuario(authCorreo);
+						
+						cout << endl << "Escriba su mensaje para [" << listaUsuarios[numUsuario].nombre << " " << listaUsuarios[numUsuario].apellido << "]:" << endl;
+						cin >> mensaje;
+						
+						cantMensajes = listaUsuarios[numUsuario].cantMensajes;
+						listaUsuarios[numUsuario].mensajes[cantMensajes] = mensaje;
+						listaUsuarios[numUsuario].cantMensajes += 1;
+						
+						cout << endl << "Mensaje enviado correctamente!" << endl << endl;
+					}
+				}
+				break;
+				
+			/* Ver mis mensajes */
+			case '5':
+				if (auth == false) {
+					cout << endl << "No se ha autentificado ningun usuario." << endl << endl;
+				} else {
+					if (listaUsuarios[usuarioAuth(authCorreo)].cantMensajes == 0) {
+						cout << endl << "No tienes ningun mensaje." << endl << endl;
+					} else {
+						for (int i = 0; i < listaUsuarios[usuarioAuth(authCorreo)].cantMensajes; i++) {
+							cout << endl << "[" << (i+1) << "] " << "'" << listaUsuarios[usuarioAuth(authCorreo)].mensajes[i] << "'." << endl << endl;
+						}
+					}
+				}
+				break;
+				
+			/* Ver mi muro */
+			case '6':
+				//flag 3
+				flag2 = false;
+				flag3 = false;
+				char opcionPosts;
+				
+				if (auth == false) {
+					cout << endl << "No se ha autentificado ningun usuario." << endl << endl;
+				} else {
+					if (listaUsuarios[usuarioAuth(authCorreo)].cantPosteos == 0) {
+						while (flag2 == false) {
+							cout << endl << "No tienes ningun post. Quieres crear uno nuevo?" << endl;
+							cout << "1) Si." << endl;
+							cout << "2) No." << endl;
+							opcionPosts = getch();
+							
+							if (opcionPosts == '1') {
+								crearPost(authCorreo);
+							} else if (opcionPosts == '2') {
+								cout << endl;
+								flag2 = true;
+							} else {
+								cout << endl << "Error. Introduzca un 1 o 2 para responder." << endl;
+							}
+						}
+					} else {
+						if (listaUsuarios[usuarioAuth(authCorreo)].cantPosteos >= 10) {
+							mostrarPost(authCorreo);
+							cout << endl << endl << "(Has alcanzado la cantidad maxima de posts)" << endl;
+						} else {
+							while (flag3 == false) {
+								cout << endl << "Que desea hacer? Escoja una opcion." << endl;
+								cout << "1) Crear un nuevo post." << endl;
+								cout << "2) Ver mis posts." << endl;
+								cout << "0) Volver." << endl;
+								opcionPosts = getch();
+								
+								switch (opcionPosts) {
+									case '1':
+										crearPost(authCorreo);
+										break;
+									case '2':
+										mostrarPost(authCorreo);
+										break;
+									case '0':
+										cout << endl;
+										flag3 = true;
+										break;
+									default:
+										cout << endl << "Error. Introduzca un 1, 2 o 0 para responder." << endl;
+								}
+							}
+						}
+					}
+				}
+				break;
+			case '0':
+				flag = true;
+				break;
+			default:
+				cout << endl << "Error. Ingrese un numero correspondiente." << endl << endl;
+		}
+	}
+	
+}
